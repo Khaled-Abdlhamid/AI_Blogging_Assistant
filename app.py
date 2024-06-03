@@ -1,9 +1,19 @@
 import streamlit as st
 
 import google.generativeai as genai
-from apikey import google_gemini_api_key
+from apikey import google_gemini_api_key, openai_api_key
+from openai import OpenAI
+from streamlit_carousel import carousel
 
+client = OpenAI(api_key=openai_api_key)
 genai.configure(api_key=google_gemini_api_key)
+
+single_img = dict(title="",
+                  text="",
+                  img="",
+                  link=""
+                  )
+
 
 # Creating the model
 generation_config = {
@@ -53,9 +63,27 @@ with st.sidebar:
     #constructing the prompt
     prompt_part = [f"Generate a comprehensive, engaging blog post relevant to the given title \"{blog_title}\" and keywords {keywords}.  Make sure to incorporate these words in the blog. The blog should be approximately {num_words} words in length, suitable for an online audience. Ensure the content is original, informative and maintains a consistent tone throughout"]
     
-    #getting the model responce
-    response = model.generate_content(prompt_part)
-    
 
 if submit_button:
+
+    #getting the model responce
+    response = model.generate_content(prompt_part)
+
+    images_gallary= []
+    for i in range(num_images):
+        img_response = client.images.generate(model="dall-e-3",
+                                            prompt=f"Generate an image on the title: {blog_title}",
+                                            size="1024x1024",
+                                            quality="standard",
+                                            n=1)
+        new_img = single_img.copy()
+        new_img['title'] = f"Image{i+1}"
+        new_img['text'] = f"{blog_title}"
+        new_img['img'] = img_response.data[0].url
+
+        images_gallary.append(new_img)
+
+    
+    carousel(items=images_gallary)
+
     st.write(response.text)
