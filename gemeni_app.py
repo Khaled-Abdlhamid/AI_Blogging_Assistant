@@ -5,14 +5,14 @@ from apikey import google_gemini_api_key, openai_api_key
 from openai import OpenAI
 from streamlit_carousel import carousel
 
-client = OpenAI(api_key=openai_api_key)
+# client = OpenAI(api_key=openai_api_key)
 genai.configure(api_key=google_gemini_api_key)
 
-single_img = dict(title="",
-                  text="",
-                  img="",
-                  link=""
-                  )
+# single_img = dict(title="",
+#                   text="",
+#                   img="",
+#                   link=""
+#                   )
 
 
 # Creating the model
@@ -35,10 +35,10 @@ model = genai.GenerativeModel(
 st.set_page_config(layout="wide")
 
 #title of the app
-st.title("The Blog is here...")
+st.title("Your Blog is here.")
 
 #sub-title 
-st.subheader("Your AI Assistant is at your service")
+st.subheader("Your AI Assistant is at your service..")
 
 #creating sidebar for the input
 with st.sidebar:
@@ -55,7 +55,7 @@ with st.sidebar:
     num_words = st.slider("Number of words", min_value=200, max_value=500, step=50)
 
      #taking number of images from the user
-    num_images = st.number_input("Number of Images", min_value=1, max_value=5, step=1)
+    # num_images = st.number_input("Number of Images", min_value=1, max_value=5, step=1)
 
     #creating the submit button
     submit_button = st.button("Generate Blog")
@@ -69,21 +69,21 @@ if submit_button:
     #getting the model responce
     response = model.generate_content(prompt_part)
 
-    images_gallary= []
-    for i in range(num_images):
-        img_response = client.images.generate(model="dall-e-3",
-                                            prompt=f"Generate an image on the title: {blog_title}",
-                                            size="1024x1024",
-                                            quality="standard",
-                                            n=1)
-        new_img = single_img.copy()
-        new_img['title'] = f"Image{i+1}"
-        new_img['text'] = f"{blog_title}"
-        new_img['img'] = img_response.data[0].url
+    # images_gallary= []
+    # for i in range(num_images):
+    #     img_response = client.images.generate(model="dall-e-3",
+    #                                         prompt=f"Generate an image on the title: {blog_title}",
+    #                                         size="1024x1024",
+    #                                         quality="standard",
+    #                                         n=1)
+    #     new_img = single_img.copy()
+    #     new_img['title'] = f"Image{i+1}"
+    #     new_img['text'] = f"{blog_title}"
+    #     new_img['img'] = img_response.data[0].url
 
-        images_gallary.append(new_img)
+    #     images_gallary.append(new_img)
 
     
-    carousel(items=images_gallary)
+    # carousel(items=images_gallary)
 
     st.write(response.text)

@@ -8,5 +8,9 @@
 - Streamlit: for the web app.
 - Gemeni pro: for the handling the text query.
 - Dalle-3: for the images.
+- Langchain
+- Llama2 (9B quantized)
 
-
+### Models
+- gemeni_app.py : used google gemeni for the blog generation.
+- llama_app : used Llama2 for the blog generation.
